@@ -1,6 +1,16 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+
+mongoose
+    .connect(
+        `mongodb+srv://kishan:Jay%40kishan@node-rest-shop.cqlzks3.mongodb.net/?retryWrites=true&w=majority`
+    )
+    .then(() => console.log("Connection established!"))
+    .catch((err) => {
+        console.log(err);
+    });
 
 const productRoutes = require("./api/routes/product");
 const orderRoutes = require("./api/routes/orders");
@@ -26,7 +36,9 @@ app.use((req, res, next) => {
 
     // The next code block is for the preflight request. When the browser sees that the request is a POST, it sends a preflight request to the server to check if it is allowed to do the POST request. The server then responds with the header "Access-Control-Allow-Methods" which includes all the methods that the server allows. The browser then executes the POST request.
     if (req.method === "OPTIONS") {
-        res.status(200).header("Access-Control-Allow-Methods", "PUT, POST, DELETE, PATCH");
+        return res
+            .status(200)
+            .header("Access-Control-Allow-Methods", "PUT, POST, DELETE, PATCH");
     }
     next();
 });
